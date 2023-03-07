@@ -58,19 +58,10 @@ public class SellerDaoJDBC implements SellerDao {
 			
 			// Testando se a consulta retornou registro
 			if (rs.next()) {
-				Department dep = new Department();
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DeptName"));
+				Department dept = instantiateDepartment(rs);
+				Seller seller = instantiateSeller(rs, dept);
 				
-				Seller sel = new Seller();
-				sel.setId(rs.getInt("Id"));
-				sel.setName(rs.getString("Name"));
-				sel.setEmail(rs.getString("Email"));
-				sel.setBirthDate(rs.getDate("BirthDate").toLocalDate());
-				sel.setBaseSalary(rs.getDouble("BaseSalary"));
-				sel.setDepartment(dep);  // Associação de objetos
-				
-				return sel;
+				return seller;
 			}
 			
 			return null;
@@ -82,6 +73,29 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeStatement(st);  // Fechando recursos, não fechar a conexão
 			DB.closeResultSet(rs);
 		}
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dept = new Department();
+		
+		// Não tratar a exceção no método auxiliar, apenas propagar
+		dept.setId(rs.getInt("DepartmentId"));
+		dept.setName(rs.getString("DeptName"));
+		
+		return dept;
+	}
+	
+	private Seller instantiateSeller(ResultSet rs, Department dept) throws SQLException {
+		Seller seller = new Seller();
+		
+		seller.setId(rs.getInt("Id"));
+		seller.setName(rs.getString("Name"));
+		seller.setEmail(rs.getString("Email"));
+		seller.setBirthDate(rs.getDate("BirthDate").toLocalDate());
+		seller.setBaseSalary(rs.getDouble("BaseSalary"));
+		seller.setDepartment(dept);  // Associação de objetos
+		
+		return seller;
 	}
 
 	@Override
