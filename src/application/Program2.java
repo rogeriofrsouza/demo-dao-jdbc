@@ -13,16 +13,16 @@ public class Program2 {
 
 		Scanner sc = new Scanner(System.in);
 		
-		DepartmentDao deptDao = DaoFactory.createDepartmentDao();
+		DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
 		
 		System.out.println("=== TEST 1: department findById ===");
-		Department dept = deptDao.findById(3);
+		Department dept = departmentDao.findById(3);
 		
 		System.out.println(dept);
 		// ------------------------
 		
 		System.out.println("\n=== TEST 2: department findAll ===");
-		List<Department> list = deptDao.findAll();
+		List<Department> list = departmentDao.findAll();
 		
 		list.forEach(System.out::println);
 		// ------------------------
@@ -30,16 +30,16 @@ public class Program2 {
 		System.out.println("\n=== TEST 3: department insert ===");
 		
 		Department newDept = new Department(null, "Music");
-		deptDao.insert(newDept);
+		departmentDao.insert(newDept);
 		
 		System.out.println("Inserted! New id = " + newDept.getId());
 		// ------------------------
 		
 		System.out.println("\n=== TEST 4: department update ===");
 		
-		dept = deptDao.findById(1);
+		dept = departmentDao.findById(1);
 		dept.setName("Food");
-		deptDao.update(dept);
+		departmentDao.update(dept);
 		
 		System.out.println("Update completed!");
 		// ------------------------
@@ -48,7 +48,7 @@ public class Program2 {
 		System.out.print("Enter id for delete test: ");
 		int id = sc.nextInt();
 		
-		deptDao.deleteById(id);
+		departmentDao.deleteById(id);
 		System.out.println("Delete completed!");
 		
 		sc.close();

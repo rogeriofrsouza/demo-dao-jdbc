@@ -4,7 +4,7 @@ import db.DB;
 import model.dao.impl.DepartmentDaoJDBC;
 import model.dao.impl.SellerDaoJDBC;
 
-// Classe auxiliar responsável por instanciar os objetos DAOs
+// Classe auxiliar responsável por instanciar os DAOs
 public class DaoFactory {
 
 	public static SellerDao createSellerDao() {

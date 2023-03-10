@@ -20,13 +20,13 @@ public class SellerDaoJDBC implements SellerDao {
 	
 	private Connection conn;
 	
-	// Injeção de dependência com a conexão pelo construtor
+	// Injeção de dependência
 	public SellerDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
 
 	@Override
-	public void insert(Seller seller) {
+	public void insert(Seller obj) {
 		PreparedStatement st = null;
 		
 		try {
@@ -37,11 +37,11 @@ public class SellerDaoJDBC implements SellerDao {
 					+ "(?, ?, ?, ?, ?)", 
 					Statement.RETURN_GENERATED_KEYS);
 			
-			st.setString(1, seller.getName());
-			st.setString(2, seller.getEmail());
-			st.setDate(3, java.sql.Date.valueOf(seller.getBirthDate()));
-			st.setDouble(4, seller.getBaseSalary());
-			st.setInt(5, seller.getDepartment().getId());
+			st.setString(1, obj.getName());
+			st.setString(2, obj.getEmail());
+			st.setDate(3, java.sql.Date.valueOf(obj.getBirthDate()));
+			st.setDouble(4, obj.getBaseSalary());
+			st.setInt(5, obj.getDepartment().getId());
 			
 			int rowsAffected = st.executeUpdate();
 			
@@ -50,7 +50,7 @@ public class SellerDaoJDBC implements SellerDao {
 				
 				if (rs.next()) {
 					int id = rs.getInt(1);
-					seller.setId(id);  // Popular objeto seller com o novo Id dele
+					obj.setId(id);  // Popular objeto com o Id gerado
 				}
 				
 				DB.closeResultSet(rs);
@@ -68,7 +68,7 @@ public class SellerDaoJDBC implements SellerDao {
 	}
 
 	@Override
-	public void update(Seller seller) {
+	public void update(Seller obj) {
 		PreparedStatement st = null;
 		
 		try {
@@ -77,12 +77,12 @@ public class SellerDaoJDBC implements SellerDao {
 					+ "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? "
 					+ "WHERE Id = ?");
 			
-			st.setString(1, seller.getName());
-			st.setString(2, seller.getEmail());
-			st.setDate(3, java.sql.Date.valueOf(seller.getBirthDate()));
-			st.setDouble(4, seller.getBaseSalary());
-			st.setInt(5, seller.getDepartment().getId());
-			st.setInt(6, seller.getId());
+			st.setString(1, obj.getName());
+			st.setString(2, obj.getEmail());
+			st.setDate(3, java.sql.Date.valueOf(obj.getBirthDate()));
+			st.setDouble(4, obj.getBaseSalary());
+			st.setInt(5, obj.getDepartment().getId());
+			st.setInt(6, obj.getId());
 			
 			st.executeUpdate();
 		}
@@ -99,7 +99,9 @@ public class SellerDaoJDBC implements SellerDao {
 		PreparedStatement st = null;
 		
 		try {
-			st = conn.prepareStatement("DELETE FROM seller WHERE Id = ?");
+			st = conn.prepareStatement(
+					"DELETE FROM seller "
+					+ "WHERE Id = ?");
 			
 			st.setInt(1, id);
 			st.executeUpdate();
@@ -143,7 +145,8 @@ public class SellerDaoJDBC implements SellerDao {
 			throw new DbException(e.getMessage());
 		}
 		finally {
-			DB.closeStatement(st);  // Fechando recursos, não fechar a conexão
+			// Fechando recursos, não fechar a conexão
+			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
 	}

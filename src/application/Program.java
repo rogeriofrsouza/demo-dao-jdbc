@@ -16,12 +16,12 @@ public class Program {
 		Scanner sc = new Scanner(System.in);
 		
 		/*
-		 * Program não conhece a implementação, somente a interface
 		 * Injeção de dependência sem implementação explícita (Factory)
+		 * Program conhece apenas a interface
 		 */
 		SellerDao sellerDao = DaoFactory.createSellerDao();
 		
-		System.out.println("=== TEST 1: seller findById ===");	
+		System.out.println("=== TEST 1: seller findById ===");
 		Seller seller = sellerDao.findById(3);
 		
 		System.out.println(seller);
@@ -29,7 +29,7 @@ public class Program {
 		
 		System.out.println("\n=== TEST 2: seller findByDepartment ===");
 		
-		Department department = new Department(2, null);	
+		Department department = new Department(2, null);
 		List<Seller> list = sellerDao.findByDepartment(department);
 		
 		list.forEach(System.out::println);
